@@ -82,8 +82,12 @@ def process_docs(dataset: datasets.Dataset) -> datasets.Dataset:
 def process_results(doc: dict, results: List[str]) -> Dict[str, int]:
     candidates = results[0]
 
-    unnormalized_answer = get_unnormalized_answer(candidates)
-    answer = normalize_final_answer(unnormalized_answer)
+    # Connor made this change on 2024/04/03
+    answer = normalize_final_answer(
+        remove_boxed(last_boxed_only_string(doc["solution"]))
+    )
+    # unnormalized_answer = get_unnormalized_answer(candidates)
+    # answer = normalize_final_answer(unnormalized_answer)
 
     if is_equiv(answer, doc["answer"]):
         retval = 1
